@@ -34,8 +34,8 @@ type Keyr struct {
 }
 
 //create new keyr
-func NewKeyr(data map[string]interface{}) *Keyr {
-	return &Keyr{meta: data}
+func NewKeyr(data map[string]interface{}) Keyr {
+	return Keyr{meta: data}
 }
 
 /*return value from map as interface*/
