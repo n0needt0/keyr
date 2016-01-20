@@ -24,18 +24,33 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
+	"sync"
 )
 
 type Keyr struct {
+	sync.Mutex
 	meta map[string]interface{}
 }
 
-func NewKeyr(newmeta map[string]interface{}) *Keyr {
-	return &Keyr{meta: newmeta}
+func NewKeyrWithData(data map[string]interface{}) *Keyr {
+	return &Keyr{meta: data}
+}
+
+func NewKeyrEmpty() *Keyr {
+	return &Keyr{meta: make(map[string]interface{})}
+}
+
+/*return value from map as interface*/
+func (bt *Keyr) AddKeyVal(key string, val interface{}) {
+	bt.Lock()
+	bt.meta[key] = val
+	bt.Unlock()
 }
 
 /*return value from map as interface*/
 func (bt *Keyr) GetKeyAsInterface(key string) (interface{}, error) {
+	bt.Lock()
+	defer bt.Unlock()
 	if key == "" {
 		return nil, errors.New("Keyr:GetKeyAsInterface (key is empty)")
 	}
@@ -47,6 +62,8 @@ func (bt *Keyr) GetKeyAsInterface(key string) (interface{}, error) {
 
 /*return value from map as string*/
 func (bt *Keyr) GetKeyAsString(key string) (string, error) {
+	bt.Lock()
+	defer bt.Unlock()
 	elinterface, err := bt.GetKeyAsInterface(key)
 	if err != nil {
 		return "", err
@@ -78,6 +95,8 @@ func (bt *Keyr) GetKeyAsString(key string) (string, error) {
 
 /*return value from map as Int*/
 func (bt *Keyr) GetKeyAsInt(key string) (int, error) {
+	bt.Lock()
+	defer bt.Unlock()
 	elstr, err := bt.GetKeyAsString(key)
 	if err != nil {
 		fmt.Println(err)
@@ -98,6 +117,8 @@ func (bt *Keyr) GetKeyAsInt(key string) (int, error) {
 
 /*return value from map as Float*/
 func (bt *Keyr) GetKeyAsFloat(key string) (float64, error) {
+	bt.Lock()
+	defer bt.Unlock()
 	elstr, err := bt.GetKeyAsString(key)
 	if err != nil {
 		fmt.Println(err)
@@ -117,6 +138,8 @@ func (bt *Keyr) GetKeyAsFloat(key string) (float64, error) {
 }
 
 func (bt *Keyr) GetKeyAsBool(key string) (bool, error) {
+	bt.Lock()
+	defer bt.Unlock()
 	elstr, err := bt.GetKeyAsString(key)
 	if err != nil {
 		return false, err
@@ -135,6 +158,8 @@ func (bt *Keyr) GetKeyAsBool(key string) (bool, error) {
 }
 
 func (bt *Keyr) StringsContainString(hay []string, needle string) bool {
+	bt.Lock()
+	defer bt.Unlock()
 	for _, valid := range hay {
 		if valid == needle {
 			return true
