@@ -39,21 +39,21 @@ func NewKeyr(data map[string]interface{}) *Keyr {
 }
 
 /*return value from map as interface*/
-func (bt *Keyr) AddKeyVal(key string, val interface{}) {
+func (bt Keyr) AddKeyVal(key string, val interface{}) {
 	bt.Lock()
 	bt.meta[key] = val
 	bt.Unlock()
 }
 
 /*return value from map as interface*/
-func (bt *Keyr) GetAll() map[string]interface{} {
+func (bt Keyr) GetAll() map[string]interface{} {
 	bt.Lock()
 	defer bt.Unlock()
 	return bt.meta
 }
 
 /*return value from map as interface*/
-func (bt *Keyr) GetKeyAsInterface(key string) (interface{}, error) {
+func (bt Keyr) GetKeyAsInterface(key string) (interface{}, error) {
 	bt.Lock()
 	defer bt.Unlock()
 	if key == "" {
@@ -66,7 +66,7 @@ func (bt *Keyr) GetKeyAsInterface(key string) (interface{}, error) {
 }
 
 /*return value from map as string*/
-func (bt *Keyr) GetKeyAsString(key string) (string, error) {
+func (bt Keyr) GetKeyAsString(key string) (string, error) {
 	bt.Lock()
 	defer bt.Unlock()
 	elinterface, err := bt.GetKeyAsInterface(key)
@@ -99,7 +99,7 @@ func (bt *Keyr) GetKeyAsString(key string) (string, error) {
 //	return nil, errors.New(fmt.Sprintf("Keyr: GetKeyAsString bad input value %+v", elinterface))
 
 /*return value from map as Int*/
-func (bt *Keyr) GetKeyAsInt(key string) (int, error) {
+func (bt Keyr) GetKeyAsInt(key string) (int, error) {
 	bt.Lock()
 	defer bt.Unlock()
 	elstr, err := bt.GetKeyAsString(key)
@@ -121,7 +121,7 @@ func (bt *Keyr) GetKeyAsInt(key string) (int, error) {
 }
 
 /*return value from map as Float*/
-func (bt *Keyr) GetKeyAsFloat(key string) (float64, error) {
+func (bt Keyr) GetKeyAsFloat(key string) (float64, error) {
 	bt.Lock()
 	defer bt.Unlock()
 	elstr, err := bt.GetKeyAsString(key)
@@ -142,7 +142,7 @@ func (bt *Keyr) GetKeyAsFloat(key string) (float64, error) {
 	return elfloat, nil
 }
 
-func (bt *Keyr) GetKeyAsBool(key string) (bool, error) {
+func (bt Keyr) GetKeyAsBool(key string) (bool, error) {
 	bt.Lock()
 	defer bt.Unlock()
 	elstr, err := bt.GetKeyAsString(key)
@@ -162,7 +162,7 @@ func (bt *Keyr) GetKeyAsBool(key string) (bool, error) {
 	return elbool, nil
 }
 
-func (bt *Keyr) StringsContainString(hay []string, needle string) bool {
+func (bt Keyr) StringsContainString(hay []string, needle string) bool {
 	bt.Lock()
 	defer bt.Unlock()
 	for _, valid := range hay {
