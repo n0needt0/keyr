@@ -46,6 +46,13 @@ func (bt *Keyr) AddKeyVal(key string, val interface{}) {
 }
 
 /*return value from map as interface*/
+func (bt *Keyr) GetAll() map[string]interface{} {
+	bt.Lock()
+	defer bt.Unlock()
+	return bt.meta
+}
+
+/*return value from map as interface*/
 func (bt *Keyr) GetKeyAsInterface(key string) (interface{}, error) {
 	bt.Lock()
 	defer bt.Unlock()
