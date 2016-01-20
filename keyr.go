@@ -27,17 +27,15 @@ import (
 	"sync"
 )
 
+//this is Keyr structure it is thread safe
 type Keyr struct {
 	sync.Mutex
 	meta map[string]interface{}
 }
 
-func NewKeyrWithData(data map[string]interface{}) *Keyr {
+//create new keyr
+func NewKeyr(data map[string]interface{}) *Keyr {
 	return &Keyr{meta: data}
-}
-
-func NewKeyrEmpty() *Keyr {
-	return &Keyr{meta: make(map[string]interface{})}
 }
 
 /*return value from map as interface*/
